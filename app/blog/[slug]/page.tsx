@@ -1,9 +1,9 @@
-export const revalidate = 420;
+export const revalidate = 1200; // not necessary, just for ISR demonstration
 
 interface Post {
 	title: string;
-	slug: string;
 	content: string;
+	slug: string;
 }
 
 export async function generateStaticParams() {
@@ -16,15 +16,17 @@ export async function generateStaticParams() {
 	}));
 }
 
-interface BlogPostPageProps {
+interface Props {
 	params: { slug: string };
 }
 
-export default async function BlogPostPage({ params }: BlogPostPageProps) {
+export default async function BlogPostPage({ params }: Props) {
+	// deduped
 	const posts: Post[] = await fetch('http://localhost:3000/api/content').then(
 		res => res.json()
 	);
 	const post = posts.find(post => post.slug === params.slug)!;
+
 	return (
 		<div>
 			<h1>{post.title}</h1>
